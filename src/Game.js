@@ -30,7 +30,7 @@ class Game extends React.Component {
     this.setState({
       surahs: ["Surah "+ surahOptions[0].name, "Surah "+ surahOptions[1].name, "Surah "+ surahOptions[2].name,
         "Surah "+ surahOptions[3].name, "Surah "+ surahOptions[4].name],
-      iSurahCorrect: [surahOptions[0].isCorrect, surahOptions[1].isCorrect, surahOptions[2].isCorrect,
+      isSurahCorrect: [surahOptions[0].isCorrect, surahOptions[1].isCorrect, surahOptions[2].isCorrect,
         surahOptions[3].isCorrect, surahOptions[4].isCorrect]
     })
   }
@@ -106,6 +106,7 @@ class Game extends React.Component {
   }
 
   surahSelected(isCorrect){
+    console.log(`Surah selected and isCorrect = ${isCorrect}`);
     if (isCorrect){
       this.setState({
         isCorrect: true,
