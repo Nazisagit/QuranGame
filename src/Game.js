@@ -62,15 +62,16 @@ class Game extends React.Component {
     .then((response) => {
       var firstAyah = Math.floor(Math.random() * (response.data.data.numberOfAyahs - 3) ) + 1;
       var firstAyahNo = ('000' + firstAyah).substr(-3);
-      var secondAyah = parseInt(firstAyahNo) + 2;
+      var secondAyah = parseInt(firstAyahNo) + 1;
       var secondAyahNo = ('000' + secondAyah).substr(-3);
-      var thirdAyah = parseInt(firstAyahNo) + 3;
+      var thirdAyah = parseInt(firstAyahNo) + 2;
       var thirdAyahNo = ('000' + thirdAyah).substr(-3);
       this.setState({
         audioURLs: ["https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + firstAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + secondAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + thirdAyahNo + ".mp3",],
         round: this.state.round + 1,
+        ayaatRead: 1,
       })
 
     })
@@ -81,6 +82,8 @@ class Game extends React.Component {
   }
 
   nextAyah(){
+    console.log(`Ayaat read: ${this.state.ayaatRead}`);
+    console.log(this.state);
     if (this.state.ayaatRead === 1){
       this.setState({
         // playing1: Sound.status.STOPPED,
@@ -106,10 +109,12 @@ class Game extends React.Component {
   }
 
   surahSelected(isCorrect){
-    console.log(`Surah selected and isCorrect = ${isCorrect}`);
+  
     if (isCorrect){
       this.setState({
         isCorrect: true,
+        ayaatRead: 1,
+        playing: [Sound.status.PLAYING, Sound.status.STOPPED, Sound.status.STOPPED],
       });
       this.nextRound();
     }
