@@ -6,7 +6,7 @@ import Game from './Game';
 function App() {
   
   return (
-    <div className="App"s>
+    <div className="App">
       <Game></Game>
     </div>
   );
