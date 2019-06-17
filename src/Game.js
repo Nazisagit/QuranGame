@@ -46,26 +46,26 @@ class Game extends React.Component {
       return
     }
 
-    var randomSurah = Math.floor(Math.random() * 114) + 1;
-    var surahOptions = [];
+    let randomSurah = Math.floor(Math.random() * 114) + 1;
+    let surahOptions = [];
     
     axios.get("http://staging.quran.com:3000/api/v3/chapters").then((response) => {
       surahOptions.push({name: response.data.chapters[randomSurah - 1].name_simple, isCorrect: true,});
-      for (var i=1; i<5; i++){
+      for (let i=1; i<5; i++){
         surahOptions.push({name: response.data.chapters[Math.floor(Math.random() * 114)].name_simple, isCorrect: false,});
       }
     this.createOptions(surahOptions);
     });
   
-    var randomSurahNo = ('000' + randomSurah).substr(-3);
+    let randomSurahNo = ('000' + randomSurah).substr(-3);
     axios.get("http://api.alquran.cloud/v1/surah/" + randomSurahNo)
     .then((response) => {
-      var firstAyah = Math.floor(Math.random() * (response.data.data.numberOfAyahs - 3) ) + 1;
-      var firstAyahNo = ('000' + firstAyah).substr(-3);
-      var secondAyah = parseInt(firstAyahNo) + 1;
-      var secondAyahNo = ('000' + secondAyah).substr(-3);
-      var thirdAyah = parseInt(firstAyahNo) + 2;
-      var thirdAyahNo = ('000' + thirdAyah).substr(-3);
+      let firstAyah = Math.floor(Math.random() * (response.data.data.numberOfAyahs - 3) ) + 1;
+      let firstAyahNo = ('000' + firstAyah).substr(-3);
+      let secondAyah = parseInt(firstAyahNo) + 1;
+      let secondAyahNo = ('000' + secondAyah).substr(-3);
+      let thirdAyah = parseInt(firstAyahNo) + 2;
+      let thirdAyahNo = ('000' + thirdAyah).substr(-3);
       this.setState({
         audioURLs: ["https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + firstAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + secondAyahNo + ".mp3",
@@ -77,27 +77,17 @@ class Game extends React.Component {
     })
   }
 
-  getSurahOptions() {
-
-  }
-
   nextAyah(){
     console.log(`Ayaat read: ${this.state.ayaatRead}`);
     console.log(this.state);
     if (this.state.ayaatRead === 1){
       this.setState({
-        // playing1: Sound.status.STOPPED,
-        // playing2: Sound.status.PLAYING,
-        // playing3: Sound.status.STOPPED,
         playing: [Sound.status.STOPPED, Sound.status.PLAYING, Sound.status.STOPPED],
         ayaatRead: this.state.ayaatRead + 1,
       })
     }
     else if (this.state.ayaatRead === 2){
       this.setState({
-        // playing1: Sound.status.STOPPED,
-        // playing2: Sound.status.STOPPED,
-        // playing3: Sound.status.PLAYING,
         playing: [Sound.status.STOPPED, Sound.status.STOPPED, Sound.status.PLAYING],
         ayaatRead: this.state.ayaatRead + 1,
       })
@@ -126,7 +116,7 @@ class Game extends React.Component {
   }
 
   static shuffle(a) {
-    var j, x, i;
+    let j, x, i;
     for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
         x = a[i];
@@ -152,24 +142,6 @@ class Game extends React.Component {
         <div>
           {this.state.isCorrect && (<div style={{color: 'green',}}> Correct </div>)}
           {this.state.gameOver && (<div style={{color: 'red',}}> Game Over </div>)}
-          {/*<Sound url={this.state.audioURL} autoLoad playStatus={this.state.playing1} onFinishedPlaying={() => this.nextAyah()}></Sound>*/}
-          {/*<Sound url={this.state.audio2URL} autoLoad playStatus={this.state.playing2} onFinishedPlaying={() => this.nextAyah()}></Sound>*/}
-          {/*<Sound url={this.state.audio3URL} autoLoad playStatus={this.state.playing3} onFinishedPlaying={() => this.nextAyah()}></Sound>*/}
-          {/*<Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurah1Correct)}>*/}
-          {/*  {this.state.surah1}*/}
-          {/*</Button>*/}
-          {/*<Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurah2Correct)}>*/}
-          {/*  {this.state.surah2}*/}
-          {/*</Button>*/}
-          {/*<Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurah3Correct)}>*/}
-          {/*  {this.state.surah3}*/}
-          {/*</Button>*/}
-          {/*<Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurah4Correct)}>*/}
-          {/*  {this.state.surah4}*/}
-          {/*</Button>*/}
-          {/*<Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurah5Correct)}>*/}
-          {/*  {this.state.surah5}*/}
-          {/*</Button>*/}
           <Sound url={this.state.audioURLs[0]} autoLoad playStatus={this.state.playing[0]} onFinishedPlaying={() => this.nextAyah()}></Sound>
           <Sound url={this.state.audioURLs[1]} autoLoad playStatus={this.state.playing[1]} onFinishedPlaying={() => this.nextAyah()}></Sound>
           <Sound url={this.state.audioURLs[2]} autoLoad playStatus={this.state.playing[2]} onFinishedPlaying={() => this.nextAyah()}></Sound>
