@@ -2,7 +2,7 @@ Guidelines on how to contribute to this project.
 
 # Branching
 Always create a branch for every new feature, or bug fix.  
-All new branches are to be made from `dev`
+All new branches are to be made from `master`
 
 ## Feature branches
 ### Style: `feature/feature_name`
