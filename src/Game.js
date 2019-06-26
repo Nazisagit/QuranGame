@@ -64,7 +64,6 @@ class Game extends React.Component {
         audioURLs: ["https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + firstAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + secondAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + thirdAyahNo + ".mp3",],
-        round: this.state.round + 1,
         ayaatRead: 1,
       })
     })
@@ -88,6 +87,10 @@ class Game extends React.Component {
   }
 
   nextRound(){
+    this.setState({
+      round: this.state.round + 1,
+      score: this.state.score + 1,
+    });
     this.randomSurahAndAyah()
   }
 
@@ -146,7 +149,7 @@ class Game extends React.Component {
         {this.state.started && !this.state.gameOver && (
           <div>
             <div>Round {this.state.round}</div>
-            <div>Score: This is a placholder</div>
+            <div>Score: {this.state.score}</div>
             {this.state.isCorrect && (<div style={{color: 'green',}}> Correct </div>)}
             <Sound url={this.state.audioURLs[0]} autoLoad playStatus={this.state.playing[0]} onFinishedPlaying={() => this.nextAyah()}></Sound>
             <Sound url={this.state.audioURLs[1]} autoLoad playStatus={this.state.playing[1]} onFinishedPlaying={() => this.nextAyah()}></Sound>
