@@ -10,13 +10,13 @@ class Game extends React.Component {
   state = {
     audioURLs: ["", "", ""],
     playing: [Sound.status.STOPPED, Sound.status.STOPPED, Sound.status.STOPPED],
-    started: false,
-    ayaatRead: 0,
     surahs: ["", "", "", "", ""],
     isSurahCorrect: [false, false, false, false, false],
+    started: false,
+    ayaatRead: 0,
     isCorrect: false,
     score: 0,
-    round: 0,
+    round: 1,
     gameOver: false,
   };
 
@@ -67,7 +67,6 @@ class Game extends React.Component {
         round: this.state.round + 1,
         ayaatRead: 1,
       })
-
     })
   }
 
@@ -110,6 +109,17 @@ class Game extends React.Component {
     }
   }
 
+  restartGame() {
+    this.setState({
+      started: true,
+      ayaatRead: 0,
+      score: 0,
+      round: 1,
+      gameOver: false,
+    });
+    this.randomSurahAndAyah()
+  }
+
   static shuffle(a) {
     let j, x, i;
     for (i = a.length - 1; i > 0; i--) {
@@ -135,6 +145,8 @@ class Game extends React.Component {
 
         {this.state.started && !this.state.gameOver && (
           <div>
+            <div>Round {this.state.round}</div>
+            <div>Score: This is a placholder</div>
             {this.state.isCorrect && (<div style={{color: 'green',}}> Correct </div>)}
             <Sound url={this.state.audioURLs[0]} autoLoad playStatus={this.state.playing[0]} onFinishedPlaying={() => this.nextAyah()}></Sound>
             <Sound url={this.state.audioURLs[1]} autoLoad playStatus={this.state.playing[1]} onFinishedPlaying={() => this.nextAyah()}></Sound>
@@ -160,7 +172,7 @@ class Game extends React.Component {
         {this.state.started && this.state.gameOver && (
           <div>
             <div style={{color: 'red',}}> Game Over </div>
-            <Button variant="outline-secondary" size="lg" onClick={() => this.randomSurahAndAyah()}>Restart</Button>
+            <Button variant="outline-secondary" size="lg" onClick={() => this.restartGame()}>Restart</Button>
           </div>
         )}
       </div>
