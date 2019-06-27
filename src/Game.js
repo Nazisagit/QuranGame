@@ -10,13 +10,13 @@ class Game extends React.Component {
   state = {
     audioURLs: ["", "", ""],
     playing: [Sound.status.STOPPED, Sound.status.STOPPED, Sound.status.STOPPED],
-    started: false,
-    ayaatRead: 0,
     surahs: ["", "", "", "", ""],
     isSurahCorrect: [false, false, false, false, false],
+    started: false,
+    ayaatRead: 0,
     isCorrect: false,
     score: 0,
-    round: 0,
+    round: 1,
     gameOver: false,
   };
 
@@ -39,12 +39,6 @@ class Game extends React.Component {
     this.setState({
       ayaatRead: 0,
     });
-    if (this.state.round === 10){
-      this.setState({
-        gameOver: true,
-      });
-      return
-    }
 
     let randomSurah = Math.floor(Math.random() * 114) + 1;
     let surahOptions = [];
@@ -70,10 +64,8 @@ class Game extends React.Component {
         audioURLs: ["https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + firstAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + secondAyahNo + ".mp3",
           "https://verses.quran.com/Alafasy/mp3/" + randomSurahNo + thirdAyahNo + ".mp3",],
-        round: this.state.round + 1,
         ayaatRead: 1,
       })
-
     })
   }
 
@@ -95,6 +87,10 @@ class Game extends React.Component {
   }
 
   nextRound(){
+    this.setState({
+      round: this.state.round + 1,
+      score: this.state.score + 1,
+    });
     this.randomSurahAndAyah()
   }
 
@@ -111,8 +107,20 @@ class Game extends React.Component {
     else {
       this.setState({
         isCorrect: false,
-      })
+        gameOver: true,
+      });
     }
+  }
+
+  restartGame() {
+    this.setState({
+      started: true,
+      ayaatRead: 0,
+      score: 0,
+      round: 1,
+      gameOver: false,
+    });
+    this.randomSurahAndAyah()
   }
 
   static shuffle(a) {
@@ -129,38 +137,46 @@ class Game extends React.Component {
   render() {
     return (
       <div className="container">
-        {!this.state.started && (
-        <div>
-          <Button variant="primary" size="lg" onClick={() => this.setState({
-            started: true, playing: update(this.state.playing, {0: {$set: Sound.status.PLAYING}}), ayaatRead: 1,})}>
-            Start
-          </Button>
-        </div>
+        {!this.state.started && !this.state.gameOver &&(
+          <div>
+            <Button variant="primary" size="lg" onClick={() => this.setState({
+              started: true, playing: update(this.state.playing, {0: {$set: Sound.status.PLAYING}}), ayaatRead: 1,})}>
+              Start
+            </Button>
+          </div>
         )}
 
-        {this.state.started && (
-        <div>
-          {this.state.isCorrect && (<div style={{color: 'green',}}> Correct </div>)}
-          {this.state.gameOver && (<div style={{color: 'red',}}> Game Over </div>)}
-          <Sound url={this.state.audioURLs[0]} autoLoad playStatus={this.state.playing[0]} onFinishedPlaying={() => this.nextAyah()}></Sound>
-          <Sound url={this.state.audioURLs[1]} autoLoad playStatus={this.state.playing[1]} onFinishedPlaying={() => this.nextAyah()}></Sound>
-          <Sound url={this.state.audioURLs[2]} autoLoad playStatus={this.state.playing[2]} onFinishedPlaying={() => this.nextAyah()}></Sound>
-          <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[0])}>
-            {this.state.surahs[0]}
-          </Button>
-          <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[1])}>
-            {this.state.surahs[1]}
-          </Button>
-          <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[2])}>
-            {this.state.surahs[2]}
-          </Button>
-          <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[3])}>
-            {this.state.surahs[3]}
-          </Button>
-          <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[4])}>
-            {this.state.surahs[4]}
-          </Button>
-        </div>
+        {this.state.started && !this.state.gameOver && (
+          <div>
+            <div>Round {this.state.round}</div>
+            <div>Score: {this.state.score}</div>
+            {this.state.isCorrect && (<div style={{color: 'green',}}> Correct </div>)}
+            <Sound url={this.state.audioURLs[0]} autoLoad playStatus={this.state.playing[0]} onFinishedPlaying={() => this.nextAyah()}></Sound>
+            <Sound url={this.state.audioURLs[1]} autoLoad playStatus={this.state.playing[1]} onFinishedPlaying={() => this.nextAyah()}></Sound>
+            <Sound url={this.state.audioURLs[2]} autoLoad playStatus={this.state.playing[2]} onFinishedPlaying={() => this.nextAyah()}></Sound>
+            <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[0])}>
+              {this.state.surahs[0]}
+            </Button>
+            <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[1])}>
+              {this.state.surahs[1]}
+            </Button>
+            <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[2])}>
+              {this.state.surahs[2]}
+            </Button>
+            <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[3])}>
+              {this.state.surahs[3]}
+            </Button>
+            <Button variant="outline-primary" size="lg" onClick={() => this.surahSelected(this.state.isSurahCorrect[4])}>
+              {this.state.surahs[4]}
+            </Button>
+          </div>
+        )}
+
+        {this.state.started && this.state.gameOver && (
+          <div>
+            <div style={{color: 'red',}}> Game Over </div>
+            <Button variant="outline-secondary" size="lg" onClick={() => this.restartGame()}>Restart</Button>
+          </div>
         )}
       </div>
     );
